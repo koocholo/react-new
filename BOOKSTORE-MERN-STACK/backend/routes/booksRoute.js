@@ -1,16 +1,16 @@
 import express from 'express';
 import { Book } from '../models/bookModel.js';
 
-const Router = express.Router();
+const router = express.Router();
 
 //route for save a new book
 
-Router.post('/', async (request,response) =>{
+router.post('/', async (request,response) =>{
     try{
         if (
             !request.body.title ||
             !request.body.author ||
-            !request.body.publisher
+            !request.body.publishYear 
         ) {
             return response.status(400).send({
                 message:'send all required fields: title, author, publishYear',
@@ -30,8 +30,9 @@ Router.post('/', async (request,response) =>{
     } );
     
     //route for all books from database
-    Router.get('/', async (request,response) => {
+    router.get('/', async (request,response) => {
         try {
+            console.log("we are here")
          const books = await Book.find({});
          return response.status(200).json({
             count: books.length,
@@ -44,7 +45,7 @@ Router.post('/', async (request,response) =>{
      });
      
      //route for all books from database by id
-     Router.get('/:id', async (request,response) => {
+     router.get('/:id', async (request,response) => {
         try {
             const { id } = request.params;
     
@@ -59,7 +60,7 @@ Router.post('/', async (request,response) =>{
      });
     
     //route for update a book
-    Router.put('/:id', async (request,response) =>{
+    router.put('/:id', async (request,response) =>{
     try {
         if (
             !request.body.title ||
@@ -85,7 +86,7 @@ Router.post('/', async (request,response) =>{
     });
     
     //route for delet a book
-    Router.delete('/:id', async (request,response)=> {
+    router.delete('/:id', async (request,response)=> {
     try{
     const { id } = request.params;
     const result = await Book.findByIdAndDelete(id);
@@ -102,4 +103,4 @@ Router.post('/', async (request,response) =>{
     
     });
 
-    export default Router;
+    export default router;
